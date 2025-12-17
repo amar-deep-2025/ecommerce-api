@@ -2,7 +2,6 @@ package com.amar.fullstack.ecommerce_api.services;
 
 import com.amar.fullstack.ecommerce_api.dto.UserRequestDto;
 import com.amar.fullstack.ecommerce_api.dto.UserResponseDto;
-import com.amar.fullstack.ecommerce_api.entities.User;
 
 import java.util.List;
 
