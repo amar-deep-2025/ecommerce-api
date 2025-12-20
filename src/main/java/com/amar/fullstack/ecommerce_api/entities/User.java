@@ -16,6 +16,13 @@ public class User {
     @Column(nullable = false,unique = true)
     private String email;
 
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    private boolean enabled=true;
+
     public User(){
 
     }
