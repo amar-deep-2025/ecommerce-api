@@ -1,4 +1,4 @@
-package com.amar.fullstack.ecommerce_api.services;
+package com.amar.fullstack.ecommerce_api.security;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
