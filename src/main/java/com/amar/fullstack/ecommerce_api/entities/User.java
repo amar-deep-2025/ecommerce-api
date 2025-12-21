@@ -23,6 +23,18 @@ public class User {
 
     private boolean enabled=true;
 
+    public User(){
+
+    }
+    public User(Long id, String name, String email, String password, Role role, boolean enabled) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.enabled=enabled;
+        this.role = role;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -46,16 +58,6 @@ public class User {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
-
-    public User(){
-
-    }
-    public User(Long id, String name, String email) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-    }
-
     public Long getId() {
         return id;
     }
