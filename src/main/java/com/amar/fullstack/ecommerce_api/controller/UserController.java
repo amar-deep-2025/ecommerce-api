@@ -27,6 +27,7 @@ public class UserController {
 
     @PostMapping
     public UserResponseDto create(@Valid @RequestBody UserRequestDto dto){
+        System.out.println(dto.getName());
         return userService.save(dto);
     }
 

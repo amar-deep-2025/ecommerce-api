@@ -1,9 +1,11 @@
 package com.amar.fullstack.ecommerce_api.controller;
 
+import com.amar.fullstack.ecommerce_api.dto.LoginRequest;
 import com.amar.fullstack.ecommerce_api.dto.RegisterRequest;
 import com.amar.fullstack.ecommerce_api.entities.Role;
 import com.amar.fullstack.ecommerce_api.entities.User;
 import com.amar.fullstack.ecommerce_api.repository.UserRepository;
+import com.amar.fullstack.ecommerce_api.security.JwtService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,11 +18,12 @@ public class AuthController {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
+    private JwtService jwtService;
     public AuthController(UserRepository userRepository,
-                          PasswordEncoder passwordEncoder){
+                          PasswordEncoder passwordEncoder,JwtService jwtService){
         this.userRepository=userRepository;
         this.passwordEncoder=passwordEncoder;
+        this.jwtService=jwtService;
     }
 
     @PostMapping("/register")
@@ -35,5 +38,21 @@ public class AuthController {
         return "User registered successfully";
     }
 
+    @PostMapping("/login")
+    public String login(@RequestBody LoginRequest dto){
+        User user=userRepository.findByEmail(dto.getEmail());
+
+        if (user==null){
+            return "User not Found";
+
+        }
+
+        if (!passwordEncoder.matches(dto.getPassword(),user.getPassword())){
+            return "Incorrect Password";
+        }
+
+        String token=jwtService.generateToken(user.getEmail());
+        return token;
+    }
 
 }
