@@ -11,9 +11,10 @@ public class JwtService {
 
     private static final String SECRET="mysecretkey123";
 
-    public String generateToken(String email){
+    public String generateToken(String email,String role){
         return JWT.create()
                 .withSubject(email)
+                .withClaim("role",role)//add role
                 .withIssuedAt(new Date())
                 .withExpiresAt(new Date(System.currentTimeMillis()+30*60*1000))
                 .sign(Algorithm.HMAC256(SECRET));
