@@ -5,9 +5,11 @@ import com.amar.fullstack.ecommerce_api.dto.ProductResponseDto;
 import com.amar.fullstack.ecommerce_api.entities.Product;
 import com.amar.fullstack.ecommerce_api.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ProductServiceImpl implements ProductService{
 
     @Autowired
