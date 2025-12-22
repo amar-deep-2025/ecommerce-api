@@ -41,6 +41,11 @@ public class UserController {
         return userService.save(dto);
     }
 
+    @GetMapping("/{id}")
+    public UserResponseDto getById(@PathVariable Long id){
+        return userService.getById(id);
+    }
+
 
 
 }
