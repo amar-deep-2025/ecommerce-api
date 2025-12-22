@@ -11,4 +11,6 @@ public interface UserService {
     List<UserResponseDto> getAllUsers();
 
     UserResponseDto getById(Long id);
+
+    UserResponseDto update(Long id, UserResponseDto dto);
 }

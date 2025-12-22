@@ -46,6 +46,11 @@ public class UserController {
         return userService.getById(id);
     }
 
+    @PutMapping("/{id}")
+    public UserResponseDto update(@PathVariable Long id,
+                                  @Valid @RequestBody UserResponseDto dto){
+        return userService.update(id,dto);
+    }
 
 
 }

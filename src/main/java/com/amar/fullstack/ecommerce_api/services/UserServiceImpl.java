@@ -74,5 +74,27 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
+    @Override
+    public UserResponseDto update(Long id, UserResponseDto dto) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Update role only if provided
+        if (dto.getRole() != null) {
+            user.setRole(Role.valueOf(dto.getRole()));
+        }
+
+        User updated = userRepository.save(user);
+
+        // convert to response DTO
+        UserResponseDto res = new UserResponseDto();
+        res.setId(updated.getId());
+        res.setName(updated.getName());
+        res.setEmail(updated.getEmail());
+        res.setRole(updated.getRole().name());
+
+        return res;
+    }
 
 }
