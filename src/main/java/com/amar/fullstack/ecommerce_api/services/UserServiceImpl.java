@@ -61,5 +61,18 @@ public class UserServiceImpl implements UserService {
         }).toList();
     }
 
+    @Override
+    public UserResponseDto getById(Long id) {
+        User user=userRepository.findById(id)
+                .orElseThrow(()->new RuntimeException("User not found"));
+
+        UserResponseDto dto= new UserResponseDto();
+        dto.setId(user.getId());
+        dto.setName(user.getName());
+        dto.setEmail(user.getEmail());
+        dto.setRole(user.getRole().name());
+        return dto;
+    }
+
 
 }
