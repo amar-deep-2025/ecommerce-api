@@ -1,9 +1,6 @@
 package com.amar.fullstack.ecommerce_api.dto;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public class ProductRequestDto {
     public String getName() {
@@ -48,7 +45,8 @@ public class ProductRequestDto {
     @Size(max = 1000, message = "Description must be max 1000 characters")
     private String description;
 
-    @Size(max = 5, message = "rating must be max 5")
+    @Min(value = 0, message = "rating must be at least 0")
+    @Max(value = 5, message = "rating must be max 5")
     private Double rating = 0.0;
 
     
