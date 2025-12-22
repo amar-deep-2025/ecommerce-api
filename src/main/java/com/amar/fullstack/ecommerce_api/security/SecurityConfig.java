@@ -22,7 +22,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/users/**").hasRole("ADMIN")
+                                .requestMatchers("/api/users/**").permitAll()
+                                .requestMatchers(HttpMethod.POST,"/api/users/**").hasRole("ADMIN")
+                                .requestMatchers("/api/products/**").permitAll()
+                                .requestMatchers(HttpMethod.POST,"api/products/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.PUT,"api/products/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.DELETE,"api/products/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
