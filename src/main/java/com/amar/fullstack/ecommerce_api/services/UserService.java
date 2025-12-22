@@ -9,4 +9,6 @@ public interface UserService {
     UserResponseDto save(UserRequestDto dto);
 
     List<UserResponseDto> getAllUsers();
+
+    UserResponseDto getById(Long id);
 }
