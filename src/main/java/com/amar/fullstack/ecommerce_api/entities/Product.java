@@ -21,7 +21,6 @@ public class Product {
     private String description;
 
     @Column(nullable = false)
-    @Size(max=5)
     private Double rating=0.0;
 
     public Product(){}
