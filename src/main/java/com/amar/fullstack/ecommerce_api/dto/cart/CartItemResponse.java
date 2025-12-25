@@ -7,6 +7,7 @@ public class CartItemResponse {
     private Double price;
     private int quantity;
 
+    public CartItemResponse(){}
     public Double getTotalPrice() {
         return totalPrice;
     }

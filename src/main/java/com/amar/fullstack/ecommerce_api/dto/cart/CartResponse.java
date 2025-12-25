@@ -5,7 +5,7 @@ import java.util.List;
 public class CartResponse {
 
     private List<CartItemResponse> items;
-    private Double totalPrice;
+    private Double grandTotal;
 
     public List<CartItemResponse> getItems() {
         return items;
@@ -15,11 +15,11 @@ public class CartResponse {
         this.items = items;
     }
 
-    public Double getTotalPrice() {
-        return totalPrice;
+    public Double getGrandTotal() {
+        return grandTotal;
     }
 
-    public void setTotalPrice(Double totalPrice) {
-        this.totalPrice = totalPrice;
+    public void setGrandTotal(Double grandTotal) {
+        this.grandTotal = grandTotal;
     }
 }
