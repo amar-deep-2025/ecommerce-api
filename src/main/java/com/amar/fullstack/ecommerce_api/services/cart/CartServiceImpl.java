@@ -80,7 +80,7 @@ public class CartServiceImpl implements CartService{
 
         CartResponse response=new CartResponse();
         response.setItems(items);
-        response.setTotalPrice(grandTotal);
+        response.setGrandTotal(grandTotal);
         return  response;
     }
 
