@@ -3,6 +3,7 @@ package com.amar.fullstack.ecommerce_api.controller;
 
 import com.amar.fullstack.ecommerce_api.dto.cart.AddToCartRequest;
 import com.amar.fullstack.ecommerce_api.dto.cart.CartResponse;
+import com.amar.fullstack.ecommerce_api.dto.cart.UpdateCartRequest;
 import com.amar.fullstack.ecommerce_api.services.cart.CartService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,4 +28,17 @@ public class CartController {
     public CartResponse viewCart(){
         return cartService.viewCart();
     }
+
+    //update cart item quantity
+    @PutMapping("/update")
+    public CartResponse updateQuantity(@Valid @RequestBody UpdateCartRequest request){
+        return cartService.updateQuantity(request);
+    }
+
+    @DeleteMapping("/remove/{productId}")
+    public CartResponse removeItemFromCart(@PathVariable Long productId){
+        return cartService.removeItemFromCart(productId);
+    }
+
+
 }
