@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -19,17 +21,18 @@ public class AuthController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private JwtService jwtService;
+
     public AuthController(UserRepository userRepository,
-                          PasswordEncoder passwordEncoder,JwtService jwtService){
-        this.userRepository=userRepository;
-        this.passwordEncoder=passwordEncoder;
-        this.jwtService=jwtService;
+            PasswordEncoder passwordEncoder, JwtService jwtService) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody RegisterRequest dto){
+    public String register(@RequestBody RegisterRequest dto) {
 
-        User user=new User();
+        User user = new User();
         user.setName(dto.getName());
         user.setEmail(dto.getEmail());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -39,19 +42,20 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody LoginRequest dto){
-        User user=userRepository.findByEmail(dto.getEmail());
+    public String login(@RequestBody LoginRequest dto) {
+        User user = userRepository.findByEmail(dto.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (user==null){
+        if (user == null) {
             return "User not Found";
 
         }
 
-        if (!passwordEncoder.matches(dto.getPassword(),user.getPassword())){
+        if (!passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
             return "Incorrect Password";
         }
 
-        String token=jwtService.generateToken(user.getEmail(),user.getRole().name());
+        String token = jwtService.generateToken(user.getEmail(), user.getRole().name());
         return token;
     }
 
