@@ -3,6 +3,7 @@ package com.amar.fullstack.ecommerce_api.services.cart;
 import com.amar.fullstack.ecommerce_api.dto.cart.AddToCartRequest;
 import com.amar.fullstack.ecommerce_api.dto.cart.CartItemResponse;
 import com.amar.fullstack.ecommerce_api.dto.cart.CartResponse;
+import com.amar.fullstack.ecommerce_api.dto.cart.UpdateCartRequest;
 import com.amar.fullstack.ecommerce_api.entities.Cart;
 import com.amar.fullstack.ecommerce_api.entities.CartItem;
 import com.amar.fullstack.ecommerce_api.entities.Product;
@@ -94,6 +95,36 @@ public class CartServiceImpl implements CartService{
         Cart cart=cartRepo.findByUser(user)
                 .orElseThrow(()->new RuntimeException("Cart not found or empty"));
 
+        return buildCartResponse(cart);
+    }
+
+    @Override
+    public CartResponse updateQuantity(UpdateCartRequest request) {
+        String email=SecurityContextHolder.getContext().getAuthentication().getName();
+        User user=userRepo.findByEmail(email).orElseThrow(()->new RuntimeException("User not found"));
+
+        Cart cart=cartRepo.findByUser(user).orElseThrow(()->new RuntimeException("Cart not found"));
+
+        CartItem item=cart.getItems().stream()
+                .filter(i->i.getProduct().getId().equals(request.getProductId()))
+                .findFirst()
+                .orElseThrow(()->new RuntimeException("Product not found in cart"));
+
+        item.setQuantity(request.getQuantity());
+        cartRepo.save(cart);
+        return buildCartResponse(cart);
+    }
+
+    @Override
+    public CartResponse removeItemFromCart(Long productId) {
+        String email=SecurityContextHolder.getContext().getAuthentication().getName();
+        User user=userRepo.findByEmail(email).orElseThrow(()->new RuntimeException("User not found"));
+        Cart cart=cartRepo.findByUser(user).orElseThrow(()->new RuntimeException("Cart not found"));
+
+        cart.getItems().removeIf(
+                item->item.getProduct().getId().equals(productId)
+        );
+        cartRepo.save(cart);
         return buildCartResponse(cart);
     }
 }
