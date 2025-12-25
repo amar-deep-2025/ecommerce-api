@@ -18,21 +18,48 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
         http
+                // ❌ Disable default auth
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/auth/**").permitAll()
-                                .requestMatchers("/api/users/**").permitAll()
-                                .requestMatchers(HttpMethod.POST,"/api/users/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.PUT,"/api/users/**").hasRole("ADMIN")
-                                .requestMatchers("/api/products/**").permitAll()
-                                .requestMatchers(HttpMethod.POST,"api/products/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.PUT,"api/products/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE,"api/products/**").hasRole("ADMIN")
-                                .requestMatchers("/api/cart/**").hasRole("USER")
-                                .anyRequest().authenticated()
+                .formLogin(form -> form.disable())
+                .httpBasic(basic -> basic.disable())
+
+                // ✅ Authorization rules (ORDER MATTERS)
+                .authorizeHttpRequests(auth -> auth
+
+                        // 🔓 Swagger (PUBLIC)
+                        .requestMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
+                        ).permitAll()
+
+                        // 🔓 Auth APIs
+                        .requestMatchers("/api/auth/**").permitAll()
+
+                        // 👤 USER APIs (USER role)
+                        .requestMatchers("/api/cart/**").hasRole("USER")
+
+                        // 👥 USER MANAGEMENT (ADMIN only)
+                        .requestMatchers("/api/users/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/users/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/users/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/users/**").hasRole("ADMIN")
+
+                        // 📦 PRODUCTS
+                        .requestMatchers(HttpMethod.GET, "/api/products/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/products/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN")
+
+                        // 🔒 Everything else
+                        .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
+                // ✅ JWT Filter
+                .addFilterBefore(jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
