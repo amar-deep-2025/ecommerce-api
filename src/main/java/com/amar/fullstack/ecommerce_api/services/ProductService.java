@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ProductService {
 
-    ProductResponseDto create(ProductRequestDto dto);
+    ProductResponseDto  create(ProductRequestDto dto);
 
     List<ProductResponseDto> getAll();
 
