@@ -5,7 +5,10 @@ import com.amar.fullstack.ecommerce_api.dto.UserResponseDto;
 import com.amar.fullstack.ecommerce_api.entities.Role;
 import com.amar.fullstack.ecommerce_api.entities.User;
 import com.amar.fullstack.ecommerce_api.repository.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -77,7 +80,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto update(Long id, UserResponseDto dto) {
 
-        User user = userRepository.findById(id)
+          User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         // Update role only if provided
@@ -95,6 +98,27 @@ public class UserServiceImpl implements UserService {
         res.setRole(updated.getRole().name());
 
         return res;
+    }
+
+    @Override
+    public UserResponseDto getLoggedUser() {
+
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication==null || !authentication.isAuthenticated()){
+            throw new RuntimeException("User is not authenticated");
+        }
+        String email=authentication.getName();
+
+        User user= userRepository.findByEmail(email)
+                .orElseThrow(()->new RuntimeException("User is not found"));
+
+        UserResponseDto dto=new UserResponseDto();
+        dto.setId(user.getId());
+        dto.setName(user.getName());
+        dto.setEmail(user.getEmail());
+        dto.setRole(user.getRole().name());
+        return dto;
     }
 
 }
