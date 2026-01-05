@@ -127,4 +127,12 @@ public class CartServiceImpl implements CartService{
         cartRepo.save(cart);
         return buildCartResponse(cart);
     }
+
+    @Override
+    public Cart getCartForLoggedUser() {
+        String email=SecurityContextHolder.getContext().getAuthentication().getName();
+
+        User user=userRepo.findByEmail(email).orElseThrow(()->new RuntimeException("User not found"));
+        return cartRepo.findByUser(user).orElseThrow(()->new RuntimeException("Cart not found for user"));
+    }
 }
