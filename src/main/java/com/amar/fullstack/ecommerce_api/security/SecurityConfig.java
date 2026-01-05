@@ -20,26 +20,20 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                // ❌ Disable default auth
                 .csrf(csrf -> csrf.disable())
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
-
-                // ✅ Authorization rules (ORDER MATTERS)
                 .authorizeHttpRequests(auth -> auth
-
-                        // 🔓 Swagger (PUBLIC)
                         .requestMatchers(
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**"
                         ).permitAll()
 
-                        // 🔓 Auth APIs
                         .requestMatchers("/api/auth/**").permitAll()
 
                         // 👤 USER APIs (USER role)
-                        .requestMatchers("/api/cart/**").hasRole("USER")
+                        .requestMatchers("/api/cart/**").hasAnyRole("USER","ADMIN")
 
                         // 👥 USER MANAGEMENT (ADMIN only)
                         .requestMatchers("/api/users/**").permitAll()
@@ -52,6 +46,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/products/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN")
+                        // 🛒 ORDERS
+                        .requestMatchers(HttpMethod.GET,"api/orders/**").permitAll()
+                        .requestMatchers(HttpMethod.POST,"api/orders/**").hasAnyRole("USER","ADMIN")
+
 
                         // 🔒 Everything else
                         .anyRequest().authenticated()
