@@ -5,10 +5,10 @@ import jakarta.validation.constraints.NotNull;
 
 public class AddToCartRequest {
 
-    @NotNull
+    @NotNull(message = "product_id is required")
     private Long productId;
 
-    @Min(1)
+    @Min(value = 1,message = "quantity must be at least 1")
     private int quantity;
 
     public Long getProductId() {
