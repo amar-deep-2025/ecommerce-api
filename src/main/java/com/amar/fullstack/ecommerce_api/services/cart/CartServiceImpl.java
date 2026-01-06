@@ -15,6 +15,7 @@ import com.amar.fullstack.ecommerce_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.LineNumberInputStream;
 import java.util.ArrayList;
@@ -134,5 +135,13 @@ public class CartServiceImpl implements CartService{
 
         User user=userRepo.findByEmail(email).orElseThrow(()->new RuntimeException("User not found"));
         return cartRepo.findByUser(user).orElseThrow(()->new RuntimeException("Cart not found for user"));
+    }
+
+    @Override
+    @Transactional
+    public void clearCart(User user) {
+        Cart cart=getCartForLoggedUser();
+        cart.getItems().clear();
+        cartRepo.save(cart);
     }
 }
