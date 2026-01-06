@@ -14,4 +14,6 @@ public interface OrderService {
 
     public Order placeOrder();
 
+    void markOrderPaid(Order order);
+
 }
