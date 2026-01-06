@@ -12,10 +12,10 @@ import com.amar.fullstack.ecommerce_api.services.cart.CartService;
 import com.amar.fullstack.ecommerce_api.services.order.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class PaymentServiceImpl implements PaymentService{
+public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
-    private  PaymentRepository paymentRepository;
+    private PaymentRepository paymentRepository;
 
     @Autowired
     private OrderService orderService;
@@ -26,15 +26,15 @@ public class PaymentServiceImpl implements PaymentService{
     @Override
     public CreatePaymentResponseDto createPayment(CreatePaymentRequestDto dto) {
 
-        Order order=orderService.getOrderById(dto.getOrdrerId());
+        Order order = orderService.getOrderById(dto.getOrdrerId());
 
-        Payment payment=new Payment();
+        Payment payment = new Payment();
         payment.setOrder(order);
         payment.setTotalAmount(order.getTotalAmount());
         payment.setPaymentGateway("ROZARPAY");
 
-        //( razorpay order id will be created)
-        CreatePaymentResponseDto responseDto=new CreatePaymentResponseDto();
+        // ( razorpay order id will be created)
+        CreatePaymentResponseDto responseDto = new CreatePaymentResponseDto();
         responseDto.setPaymentId(payment.getId());
         responseDto.setTotalAmount(payment.getTotalAmount());
         responseDto.setGatewayUrl(payment.getPaymentGateway());
@@ -45,25 +45,23 @@ public class PaymentServiceImpl implements PaymentService{
 
     @Override
     public VerifyPaymentResponseDto verifyPayment(VerifyPaymentRequestDto dto) {
-        Payment payment=paymentRepository.findById(dto.getPaymantId()).orElseThrow(()->new RuntimeException("Payment not found"));
+        Payment payment = paymentRepository.findById(dto.getPaymantId())
+                .orElseThrow(() -> new RuntimeException("Payment not found"));
 
-        //Signature Verification
+        // Signature Verification
         payment.setStatus(PaymentStatus.SUCCESS);
         payment.setTransactionId(dto.getGetRazorpayPaymentId());
         paymentRepository.save(payment);
 
-        //update order
+        // update order
         orderService.markOrderPaid(payment.getOrder());
 
-        //Clear cart After
+        // Clear cart After
         cartService.clearCart(payment.getOrder().getUser());
 
-        VerifyPaymentResponseDto response=new VerifyPaymentResponseDto();
+        VerifyPaymentResponseDto response = new VerifyPaymentResponseDto();
         response.setMessage("Payment successful");
         response.setOrderStatus("PAID");
         return response;
-
-
-        return null;
     }
 }
