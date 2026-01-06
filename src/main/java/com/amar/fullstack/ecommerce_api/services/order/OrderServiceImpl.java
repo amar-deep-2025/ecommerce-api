@@ -67,4 +67,10 @@ public class OrderServiceImpl implements OrderService {
 
         return savedOrder;
     }
+
+    @Override
+    public void markOrderPaid(Order order) {
+        order.setStatus(OrderStatus.PAID);
+        orderRepository.save(order);
+    }
 }
