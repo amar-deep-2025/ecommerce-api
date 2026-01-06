@@ -17,4 +17,6 @@ public interface CartService {
     CartResponse removeItemFromCart(Long productId);
 
     Cart getCartForLoggedUser();
+
+    void clearCart(User user);
 }
