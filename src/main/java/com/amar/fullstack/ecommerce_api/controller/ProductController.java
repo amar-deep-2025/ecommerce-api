@@ -17,25 +17,26 @@ public class ProductController {
     private ProductService productService;
 
     @PostMapping
-    public ProductResponseDto create(@Valid @RequestBody ProductRequestDto dto){
+    public ProductResponseDto create(@Valid @RequestBody ProductRequestDto dto) {
         return productService.create(dto);
     }
 
     @GetMapping
-    public List<ProductResponseDto> getAll(){
+    public List<ProductResponseDto> getAll() {
         return productService.getAll();
     }
 
     @PutMapping("/{id}")
     public ProductResponseDto update(@PathVariable Long id,
-                                     @Valid @RequestBody ProductRequestDto dto){
-        return productService.update(id,dto);
+            @Valid @RequestBody ProductRequestDto dto) {
+        return productService.update(id, dto);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id){
-        System.out.println("Deleted item "+id);
+    public String delete(@PathVariable Long id) {
+        System.out.println("Deleted item " + id);
         productService.delete(id);
+
+        return "Product successfully deleted with id: " + id;
     }
 }
-
