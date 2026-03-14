@@ -4,9 +4,8 @@ import com.amar.fullstack.ecommerce_api.dto.ProductRequestDto;
 import com.amar.fullstack.ecommerce_api.dto.ProductResponseDto;
 import com.amar.fullstack.ecommerce_api.services.ProductService;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,33 +14,30 @@ import java.util.List;
 @RequestMapping("/api/products")
 public class ProductController {
 
-    private static final Logger log =
-            LoggerFactory.getLogger(ProductController.class);
-
     @Autowired
     private ProductService productService;
 
     @PostMapping
-    public ProductResponseDto create(@Valid @RequestBody ProductRequestDto dto){
+    public ProductResponseDto create(@Valid @RequestBody ProductRequestDto dto) {
         return productService.create(dto);
     }
 
     @GetMapping
-    public List<ProductResponseDto> getAll(){
+    public List<ProductResponseDto> getAll() {
         return productService.getAll();
     }
 
     @PutMapping("/{id}")
     public ProductResponseDto update(@PathVariable Long id,
-                                     @Valid @RequestBody ProductRequestDto dto){
-        return productService.update(id,dto);
+            @Valid @RequestBody ProductRequestDto dto) {
+        return productService.update(id, dto);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id){
-        System.out.println("Deleted item "+id);
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        System.out.println("Deleted item " + id);
         productService.delete(id);
 
-        return "Product successfully deleted with id: " + id;
+        return ResponseEntity.ok("Product successfully deleted with id: " + id);
     }
 }
