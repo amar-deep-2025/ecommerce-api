@@ -5,6 +5,7 @@ import com.amar.fullstack.ecommerce_api.dto.ProductResponseDto;
 import com.amar.fullstack.ecommerce_api.services.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,10 +34,10 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long id) {
+    public ResponseEntity<String> delete(@PathVariable Long id) {
         System.out.println("Deleted item " + id);
         productService.delete(id);
 
-        return "Product successfully deleted with id: " + id;
+        return ResponseEntity.ok("Product successfully deleted with id: " + id);
     }
 }
