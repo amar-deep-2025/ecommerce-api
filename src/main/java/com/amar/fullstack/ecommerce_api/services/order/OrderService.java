@@ -16,4 +16,5 @@ public interface OrderService {
 
     void markOrderPaid(Order order);
 
+    Order getOrderById(Long ordrerId);
 }

@@ -1,4 +1,4 @@
-package com.amar.fullstack.ecommerce_api.dto;
+package com.amar.fullstack.ecommerce_api.dto.auth.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

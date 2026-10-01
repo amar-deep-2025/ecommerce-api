@@ -40,6 +40,18 @@ public class Payment {
         this.status=PaymentStatus.CREATED;
     }
 
+    public Payment(){}
+
+    public Payment(Long id, Order order, Double totalAmount, PaymentStatus status, String paymentGateway, String transactionId, LocalDateTime createdAt) {
+        this.id = id;
+        this.order = order;
+        this.totalAmount = totalAmount;
+        this.status = status;
+        this.paymentGateway = paymentGateway;
+        this.transactionId = transactionId;
+        this.createdAt = createdAt;
+    }
+
     public Long getId() {
         return id;
     }
